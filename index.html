@@ -678,7 +678,7 @@
 
     <script>
         // API Configuration
-        const API_PROXY_URL = 'https://tmdb-api-proxy-production-2c93.up.railway.app/api';
+        const TMDB_API_KEY = 'f1ddb820208ba79f9b9f7ba19e6aa5a3';
         const YOUTUBE_API_KEY = 'AIzaSyDcQoSQ1CnOVJwpm37cPvmraK1Xmsm2sT4';
         const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
@@ -725,73 +725,85 @@
         }
 
         async function loadGenres() {
-    try {
-        const response = await fetch(`${API_PROXY_URL}/genres?language=ru-RU`);
-        const data = await response.json();
-        genres = data.genres;
-        
-        genres.forEach(genre => {
-            const option = document.createElement('option');
-            option.value = genre.id;
-            option.textContent = genre.name;
-            genreFilter.appendChild(option);
-        });
-    } catch (error) {
-        console.error('Ошибка загрузки жанров:', error);
-    }
-}
+            try {
+                const response = await fetch(`${TMDB_BASE_URL}/genre/movie/list?api_key=${TMDB_API_KEY}&language=ru-RU`);
+                const data = await response.json();
+                genres = data.genres || [];
 
+                // Populate genre filter
+                genres.forEach(genre => {
+                    const option = document.createElement('option');
+                    option.value = genre.id;
+                    option.textContent = genre.name;
+                    genreFilter.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Ошибка загрузки жанров:', error);
+            }
+        }
 
         async function searchMovies(page = 1) {
-    try {
-        loadingSpinner.style.display = 'block';
-        errorMessage.style.display = 'none';
-        moviesGrid.innerHTML = '';
-        currentPage = page;
+            try {
+                loadingSpinner.style.display = 'block';
+                errorMessage.style.display = 'none';
+                moviesGrid.innerHTML = '';
 
-        const query = searchInput.value.trim();
-        let url;
-        
-        if (query) {
-            url = `${API_PROXY_URL}/search?query=${encodeURIComponent(query)}&language=ru-RU&page=${page}`;
-        } else {
-            url = `${API_PROXY_URL}/discover?language=ru-RU&page=${page}`;
-            
-            const genre = genreFilter.value;
-            if (genre) url += `&with_genres=${genre}`;
-            
-            const country = countryFilter.value;
-            if (country) url += `&with_origin_country=${country}`;
-            
-            const year = yearFilter.value;
-            if (year) url += `&primary_release_year=${year}`;
-            
-            const rating = ratingFilter.value;
-            if (rating) url += `&vote_average_gte=${rating}`;
-            
-            const sort = sortFilter.value;
-            if (sort) url += `&sort_by=${sort}`;
+                currentPage = page;
+
+                // Build query params
+                let url = `${TMDB_BASE_URL}/discover/movie?api_key=${TMDB_API_KEY}&language=ru-RU&page=${page}`;
+
+                const query = searchInput.value.trim();
+                if (query) {
+                    url = `${TMDB_BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&language=ru-RU&page=${page}`;
+                }
+
+                const genre = genreFilter.value;
+                if (genre && !query) {
+                    url += `&with_genres=${genre}`;
+
+                const country = countryFilter.value;
+                if (country && !query) {
+                    url += `&with_origin_country=${country}`;
+                }
+                }
+
+                const year = yearFilter.value;
+                if (year) {
+                    url += `&primary_release_year=${year}`;
+                }
+
+                const rating = ratingFilter.value;
+                if (rating) {
+                    url += `&vote_average.gte=${rating}`;
+                }
+
+                const sort = sortFilter.value;
+                if (sort && !query) {
+                    url += `&sort_by=${sort}`;
+                }
+
+                url += '&sort_by=' + (sort || 'popularity.desc');
+
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (!data.results || data.results.length === 0) {
+                    showError('Фильмы не найдены. Попробуйте другие параметры поиска.');
+                    loadingSpinner.style.display = 'none';
+                    return;
+                }
+
+                totalPages = data.total_pages;
+                displayMovies(data.results);
+                displayPagination(data.total_pages);
+
+                loadingSpinner.style.display = 'none';
+            } catch (error) {
+                showError('Ошибка поиска: ' + error.message);
+                loadingSpinner.style.display = 'none';
+            }
         }
-
-        const response = await fetch(url);
-        const data = await response.json();
-
-        if (!data.results || data.results.length === 0) {
-            showError('Фильмы не найдены. Попробуйте изменить параметры поиска.');
-            loadingSpinner.style.display = 'none';
-            return;
-        }
-
-        totalPages = data.total_pages;
-        displayMovies(data.results);
-        displayPagination(data.total_pages);
-        loadingSpinner.style.display = 'none';
-    } catch (error) {
-        showError('Ошибка загрузки: ' + error.message);
-        loadingSpinner.style.display = 'none';
-    }
-}
-
 
         function displayMovies(movies) {
             moviesGrid.innerHTML = '';
@@ -886,16 +898,21 @@
                 loadingSpinner.style.display = 'block';
 
                 // Get movie details
-                const detailsResponse = await fetch(`${API_PROXY_URL}/movie/${movieId}?language=ru-RU`);
-
+                const detailsResponse = await fetch(
+                    `${TMDB_BASE_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}&language=ru-RU`
+                );
                 const movieDetails = await detailsResponse.json();
 
                 // Get videos
-                const videosResponse = await fetch(`${API_PROXY_URL}/movie/${movieId}/videos?language=ru-RU`);
+                const videosResponse = await fetch(
+                    `${TMDB_BASE_URL}/movie/${movieId}/videos?api_key=${TMDB_API_KEY}&language=ru-RU`
+                );
                 const videosData = await videosResponse.json();
 
                 // Get cast
-                const castResponse = await fetch(`${API_PROXY_URL}/movie/${movieId}/credits?language=ru-RU`);
+                const castResponse = await fetch(
+                    `${TMDB_BASE_URL}/movie/${movieId}/credits?api_key=${TMDB_API_KEY}&language=ru-RU`
+                );
                 const castData = await castResponse.json();
 
                 // Update modal
