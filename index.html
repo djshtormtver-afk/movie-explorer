@@ -677,10 +677,11 @@
     </div>
 
     <script>
-        // API Configuration
-        const TMDB_API_KEY = '09bee067cd20b215ec9e7a3266084d9d';
-        const YOUTUBE_API_KEY = 'AIzaSyDcQoSQ1CnOVJwpm37cPvmraK1Xmsm2sT4';
-        const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+         // API Configuration - теперь используем Railway proxy
+const YOUTUBE_API_KEY = 'AIzaSyDcQoSQ1CnOVJwpm37cPvmraK1Xmsm2sT4';
+const TMDB_BASE_URL = 'https://tmdb-api-proxy-production-2c93.up.railway.app';
+
+
 
         // State
         let currentPage = 1;
@@ -726,7 +727,7 @@
 
         async function loadGenres() {
             try {
-                const response = await fetch(`${TMDB_BASE_URL}/genre/movie/list?api_key=${TMDB_API_KEY}&language=ru-RU`);
+                const response = await fetch(`${TMDB_BASE_URL}/api/genres?language=ru-RU`);
                 const data = await response.json();
                 genres = data.genres || [];
 
@@ -751,37 +752,40 @@
                 currentPage = page;
 
                 // Build query params
-                let url = `${TMDB_BASE_URL}/discover/movie?api_key=${TMDB_API_KEY}&language=ru-RU&page=${page}`;
+               let url = `${TMDB_BASE_URL}/api/discover?language=ru-RU&page=${page}`;
 
-                const query = searchInput.value.trim();
-                if (query) {
-                    url = `${TMDB_BASE_URL}/search/movie?api_key=${TMDB_API_KEY}&query=${encodeURIComponent(query)}&language=ru-RU&page=${page}`;
-                }
+const query = searchInput.value.trim();
+if (query) {
+    url = `${TMDB_BASE_URL}/api/search?query=${encodeURIComponent(query)}&language=ru-RU&page=${page}`;
+}
 
-                const genre = genreFilter.value;
-                if (genre && !query) {
-                    url += `&with_genres=${genre}`;
+const genre = genreFilter.value;
+if (genre && !query) {
+    url += `&with_genres=${genre}`;
+}
 
-                const country = countryFilter.value;
-                if (country && !query) {
-                    url += `&with_origin_country=${country}`;
-                }
-                }
+const country = countryFilter.value;
+if (country && !query) {
+    url += `&with_origin_country=${country}`;
+}
 
-                const year = yearFilter.value;
-                if (year) {
-                    url += `&primary_release_year=${year}`;
-                }
+const year = yearFilter.value;
+if (year) {
+    url += `&primary_release_year=${year}`;
+}
 
-                const rating = ratingFilter.value;
-                if (rating) {
-                    url += `&vote_average.gte=${rating}`;
-                }
+const rating = ratingFilter.value;
+if (rating) {
+    url += `&vote_average_gte=${rating}`;
+}
 
-                const sort = sortFilter.value;
-                if (sort && !query) {
-                    url += `&sort_by=${sort}`;
-                }
+const sort = sortFilter.value;
+if (sort && !query) {
+    url += `&sort_by=${sort}`;
+} else if (!sort) {
+    url += `&sort_by=popularity.desc`;
+}
+
 
                 url += '&sort_by=' + (sort || 'popularity.desc');
 
@@ -897,15 +901,17 @@
             try {
                 loadingSpinner.style.display = 'block';
 
-                // Get movie details
-                const detailsResponse = await fetch(
-                    `${TMDB_BASE_URL}/movie/${movieId}?api_key=${TMDB_API_KEY}&language=ru-RU`
-                );
-                const movieDetails = await detailsResponse.json();
+                const detailsResponse = await fetch(`${TMDB_BASE_URL}/api/movie/${movieId}?language=ru-RU`);
+const movieDetails = await detailsResponse.json();
 
-                // Get videos
-                const videosResponse = await fetch(
-                    `${TMDB_BASE_URL}/movie/${movieId}/videos?api_key=${TMDB_API_KEY}&language=ru-RU`
+// Get videos
+const videosResponse = await fetch(`${TMDB_BASE_URL}/api/movie/${movieId}/videos?language=ru-RU`);
+const videosData = await videosResponse.json();
+
+// Get cast
+const castResponse = await fetch(`${TMDB_BASE_URL}/api/movie/${movieId}/credits?language=ru-RU`);
+const castData = await castResponse.json();
+
                 );
                 const videosData = await videosResponse.json();
 
