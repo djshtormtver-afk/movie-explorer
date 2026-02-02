@@ -15,11 +15,13 @@
             --bg-darker: #0a0a0a;
             --border-color: #404040;
         }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
@@ -27,6 +29,8 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
+
+        /* Header */
         header {
             background: linear-gradient(180deg, rgba(20, 20, 20, 0.95) 0%, rgba(20, 20, 20, 0.8) 100%);
             border-bottom: 3px solid var(--primary);
@@ -36,6 +40,7 @@
             z-index: 100;
             box-shadow: 0 8px 32px rgba(229, 9, 20, 0.2);
         }
+
         .header-content {
             max-width: 1400px;
             margin: 0 auto;
@@ -44,6 +49,7 @@
             align-items: center;
             justify-content: space-between;
         }
+
         .logo {
             font-size: 28px;
             font-weight: bold;
@@ -51,12 +57,15 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-shadow: 0 0 10px rgba(229, 9, 20, 0.3);
         }
+
         .search-bar {
             flex: 1;
             margin: 0 30px;
             position: relative;
         }
+
         .search-bar input {
             width: 100%;
             padding: 12px 16px;
@@ -67,16 +76,26 @@
             font-size: 14px;
             transition: all 0.3s ease;
         }
+
         .search-bar input:focus {
             outline: none;
             border-color: var(--primary);
             background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 20px rgba(229, 9, 20, 0.3);
         }
+
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Main Container */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 30px 20px;
         }
+
+        /* Filters Section */
         .filters-section {
             background: rgba(34, 31, 31, 0.6);
             border: 1px solid var(--border-color);
@@ -87,17 +106,23 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         }
+
         .filter-group {
             display: flex;
             flex-direction: column;
             gap: 10px;
         }
+
         .filter-group label {
             font-size: 13px;
             font-weight: 600;
+            text-transform: uppercase;
             color: var(--accent);
+            letter-spacing: 1px;
         }
+
         .filter-group select,
         .filter-group input {
             padding: 10px 12px;
@@ -105,27 +130,73 @@
             border-radius: 6px;
             background: rgba(20, 20, 20, 0.7);
             color: var(--text-light);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
+
+        .filter-group select:hover,
+        .filter-group input:hover {
+            border-color: var(--primary);
+            background: rgba(20, 20, 20, 0.9);
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.2);
+        }
+
         .search-btn {
             padding: 10px 24px;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), #c4081c);
             border: none;
             border-radius: 6px;
             color: var(--text-light);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 1px;
+            align-self: flex-end;
         }
+
         .search-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
         }
+
+        .search-btn:active {
+            transform: translateY(0);
+        }
+
+        .search-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading & Error */
         .loading {
             text-align: center;
             padding: 40px;
             font-size: 18px;
             color: var(--accent);
         }
+
+        .loading::after {
+            content: '';
+            animation: dots 1s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
         .error {
             background: rgba(220, 38, 38, 0.1);
             border: 1px solid rgba(220, 38, 38, 0.5);
@@ -135,12 +206,15 @@
             margin-bottom: 20px;
             text-align: center;
         }
+
+        /* Movies Grid */
         .movies-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 25px;
             margin-bottom: 40px;
         }
+
         .movie-card {
             background: rgba(34, 31, 31, 0.7);
             border: 1px solid var(--border-color);
@@ -148,98 +222,178 @@
             overflow: hidden;
             transition: all 0.3s ease;
             cursor: pointer;
+            height: 100%;
             display: flex;
             flex-direction: column;
-            height: 100%;
+            backdrop-filter: blur(10px);
+            position: relative;
         }
+
         .movie-card:hover {
             transform: translateY(-8px);
             border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(229, 9, 20, 0.3);
         }
+
         .movie-poster {
             width: 100%;
-            height: 400px;
-            background: #222;
+            height: 320px;
+            background: linear-gradient(135deg, #333 0%, #444 100%);
+            overflow: hidden;
             position: relative;
         }
+
         .movie-poster img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.3s ease;
         }
+
+        .movie-card:hover .movie-poster img {
+            transform: scale(1.05);
+        }
+
+        .movie-poster-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            background: linear-gradient(135deg, #222 0%, #333 100%);
+            color: #888;
+            font-size: 14px;
+            text-align: center;
+            padding: 20px;
+        }
+
         .rating-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--primary);
-            padding: 5px 10px;
-            border-radius: 15px;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, var(--primary), #c4081c);
+            padding: 8px 12px;
+            border-radius: 20px;
             font-weight: bold;
             font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 4px 12px rgba(229, 9, 20, 0.4);
         }
+
+        .star { color: var(--accent); }
+
         .movie-info {
-            padding: 15px;
-            flex: 1;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             gap: 10px;
+            flex: 1;
         }
+
         .movie-title {
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+            color: var(--text-light);
         }
+
         .movie-year {
-            font-size: 14px;
+            font-size: 12px;
             color: var(--accent);
+            font-weight: 500;
         }
+
         .movie-genres {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
             display: flex;
             flex-wrap: wrap;
-            gap: 5px;
+            gap: 6px;
         }
+
         .genre-tag {
-            font-size: 11px;
             background: rgba(229, 9, 20, 0.2);
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 4px;
+            border: 1px solid rgba(229, 9, 20, 0.4);
         }
+
         .movie-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-top: auto;
         }
+
         .btn {
             flex: 1;
-            padding: 8px;
-            border-radius: 4px;
+            padding: 8px 12px;
             border: 1px solid var(--border-color);
-            background: transparent;
-            color: white;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-light);
             cursor: pointer;
             font-size: 12px;
-            font-weight: bold;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            text-align: center;
         }
+
         .btn-primary {
             background: var(--primary);
             border-color: var(--primary);
+            color: var(--text-light);
         }
+
+        .btn-primary:hover {
+            background: #c4081c;
+            box-shadow: 0 4px 12px rgba(229, 9, 20, 0.4);
+        }
+
+        .btn:hover {
+            border-color: var(--primary);
+            background: rgba(229, 9, 20, 0.1);
+        }
+
+        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 40px;
+            flex-wrap: wrap;
         }
+
         .pagination button {
-            padding: 8px 16px;
-            background: #222;
+            padding: 10px 16px;
+            background: rgba(34, 31, 31, 0.7);
             border: 1px solid var(--border-color);
-            color: white;
+            border-radius: 6px;
+            color: var(--text-light);
             cursor: pointer;
-            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 13px;
         }
-        .pagination button:hover {
+
+        .pagination button:hover:not(:disabled) {
             background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
         }
+
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .pagination button.active {
+            background: var(--primary);
+            border-color: var(--accent);
+            box-shadow: 0 0 12px rgba(229, 9, 20, 0.5);
+        }
+
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -252,47 +406,154 @@
             align-items: center;
             justify-content: center;
         }
-        .modal.active { display: flex; }
+
+        .modal.active {
+            display: flex;
+        }
+
         .modal-content {
             background: var(--bg-dark);
             border: 2px solid var(--primary);
             border-radius: 12px;
             max-width: 900px;
-            width: 95%;
+            width: 90%;
             max-height: 90vh;
             overflow-y: auto;
-            padding: 30px;
             position: relative;
         }
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 30px;
-            cursor: pointer;
-            color: white;
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background: rgba(34, 31, 31, 0.8);
         }
+
+        .modal-header h2 {
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
         .movie-details {
             display: grid;
-            grid-template-columns: 1fr 2fr;
+            grid-template-columns: 1fr 1fr;
             gap: 30px;
+            margin-bottom: 25px;
         }
+
+        .detail-poster {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
         .detail-poster img {
             width: 100%;
-            border-radius: 8px;
+            height: auto;
+            display: block;
         }
-        .detail-info h2 { color: var(--accent); margin-bottom: 15px; }
-        .detail-label { font-weight: bold; color: var(--accent); margin-top: 10px; font-size: 12px; text-transform: uppercase; }
-        .detail-value { margin-bottom: 10px; }
-        .trailer-container { margin-top: 30px; border-top: 1px solid var(--border-color); padding-top: 20px; }
-        .trailer-player { width: 100%; aspect-ratio: 16/9; border: none; border-radius: 8px; }
+
+        .detail-info h3 {
+            color: var(--accent);
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .detail-info p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .detail-label {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .detail-value {
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+
+        .trailer-container {
+            margin-top: 25px;
+        }
+
+        .trailer-container h3 {
+            color: var(--accent);
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .trailer-player {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            background: #000;
+        }
+
         @media (max-width: 768px) {
-            .movie-details { grid-template-columns: 1fr; }
-            .header-content { flex-direction: column; gap: 10px; }
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .search-bar {
+                margin: 0;
+                width: 100%;
+            }
+
+            .filters-section {
+                grid-template-columns: 1fr;
+            }
+
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 15px;
+            }
+
+            .movie-details {
+                grid-template-columns: 1fr;
+            }
+
+            .movie-poster {
+                height: 250px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
         <div class="header-content">
             <div class="logo">🎬 MOVIE EXPLORER PRO</div>
@@ -302,7 +563,9 @@
         </div>
     </header>
 
+    <!-- Main Container -->
     <div class="container">
+        <!-- Filters -->
         <div class="filters-section">
             <div class="filter-group">
                 <label for="genreFilter">Жанр</label>
@@ -310,6 +573,7 @@
                     <option value="">Все жанры</option>
                 </select>
             </div>
+
             <div class="filter-group">
                 <label for="countryFilter">Страна</label>
                 <select id="countryFilter">
@@ -319,251 +583,418 @@
                     <option value="GB">Великобритания</option>
                     <option value="FR">Франция</option>
                     <option value="DE">Германия</option>
+                    <option value="IT">Италия</option>
+                    <option value="ES">Испания</option>
                     <option value="KR">Южная Корея</option>
+                    <option value="JP">Япония</option>
+                    <option value="CN">Китай</option>
+                    <option value="IN">Индия</option>
+                    <option value="CA">Канада</option>
+                    <option value="AU">Австралия</option>
+                    <option value="BR">Бразилия</option>
+                    <option value="MX">Мексика</option>
                 </select>
             </div>
+
             <div class="filter-group">
                 <label for="yearFilter">Год</label>
-                <input type="number" id="yearFilter" placeholder="2024" min="1900" max="2026">
+                <input type="number" id="yearFilter" placeholder="Год выпуска" min="1900" max="2026">
             </div>
+
             <div class="filter-group">
-                <label for="ratingFilter">Рейтинг от</label>
+                <label for="ratingFilter">Минимальный рейтинг</label>
                 <input type="number" id="ratingFilter" placeholder="0-10" min="0" max="10" step="0.1">
             </div>
+
             <div class="filter-group">
                 <label for="sortFilter">Сортировка</label>
                 <select id="sortFilter">
                     <option value="popularity.desc">По популярности</option>
-                    <option value="vote_average.desc">По рейтингу</option>
-                    <option value="release_date.desc">По дате выхода</option>
+                    <option value="vote_average.desc">По рейтингу (выше)</option>
+                    <option value="vote_average.asc">По рейтингу (ниже)</option>
+                    <option value="release_date.desc">По дате (новые)</option>
+                    <option value="release_date.asc">По дате (старые)</option>
                 </select>
             </div>
+
             <button class="search-btn" onclick="searchMovies()">Поиск</button>
         </div>
 
+        <!-- Error Message -->
         <div id="errorMessage" class="error" style="display: none;"></div>
-        <div id="loadingSpinner" class="loading" style="display: none;">Загрузка</div>
+
+        <!-- Loading -->
+        <div id="loadingSpinner" class="loading" style="display: none;"></div>
+
+        <!-- Movies Grid -->
         <div class="movies-grid" id="moviesGrid"></div>
+
+        <!-- Pagination -->
         <div class="pagination" id="pagination"></div>
     </div>
 
+    <!-- Modal for Trailer -->
     <div class="modal" id="trailerModal">
         <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
-            <div class="movie-details">
-                <div class="detail-poster">
-                    <img id="modalPoster" src="" alt="Poster">
-                </div>
-                <div class="detail-info">
-                    <h2 id="modalTitle"></h2>
-                    <div class="detail-label">Год выпуска</div>
-                    <div class="detail-value" id="modalYear"></div>
-                    <div class="detail-label">Рейтинг</div>
-                    <div class="detail-value" id="modalRating"></div>
-                    <div class="detail-label">Жанры</div>
-                    <div class="detail-value" id="modalGenres"></div>
-                    <div class="detail-label">Описание</div>
-                    <p id="modalDescription"></p>
-                </div>
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
-            <div class="trailer-container" id="trailerContainer" style="display: none;">
-                <h3>Трейлер</h3>
-                <iframe class="trailer-player" id="trailerFrame" src="" allowfullscreen></iframe>
+            <div class="modal-body">
+                <div class="movie-details">
+                    <div class="detail-poster">
+                        <img id="modalPoster" src="" alt="Poster">
+                    </div>
+                    <div class="detail-info">
+                        <div>
+                            <div class="detail-label">Год выпуска</div>
+                            <div class="detail-value" id="modalYear"></div>
+                        </div>
+                        <div>
+                            <div class="detail-label">Рейтинг</div>
+                            <div class="detail-value" id="modalRating"></div>
+                        </div>
+                        <div>
+                            <div class="detail-label">Жанры</div>
+                            <div class="detail-value" id="modalGenres"></div>
+                        </div>
+                        <div>
+                            <div class="detail-label">Продолжительность</div>
+                            <div class="detail-value" id="modalRuntime"></div>
+                        </div>
+                        <div>
+                            <div class="detail-label">Описание</div>
+                            <p id="modalDescription"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="trailer-container" id="trailerContainer" style="display: none;">
+                    <h3>Трейлер</h3>
+                    <iframe class="trailer-player" id="trailerFrame" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         // API Configuration
-        const TMDB_BASE_URL = "https://tmdb-api-proxy-production-2c93.up.railway.app";
-        const YOUTUBE_API_KEY = "AIzaSyDcQoSQ1CnOVJwpm37cPvmraK1Xmsm2sT4";
+        const API_PROXY_URL = 'https://tmdb-api-proxy-production-2c93.up.railway.app/api';
+        const YOUTUBE_API_KEY = 'AIzaSyDcQoSQ1CnOVJwpm37cPvmraK1Xmsm2sT4';
+        const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
+        // State
         let currentPage = 1;
         let totalPages = 1;
+        let currentFilters = {};
         let genres = [];
 
         // Elements
-        const searchInput = document.getElementById("searchInput");
-        const genreFilter = document.getElementById("genreFilter");
-        const countryFilter = document.getElementById("countryFilter");
-        const yearFilter = document.getElementById("yearFilter");
-        const ratingFilter = document.getElementById("ratingFilter");
-        const sortFilter = document.getElementById("sortFilter");
-        const moviesGrid = document.getElementById("moviesGrid");
-        const pagination = document.getElementById("pagination");
-        const loadingSpinner = document.getElementById("loadingSpinner");
-        const errorMessage = document.getElementById("errorMessage");
-        const trailerModal = document.getElementById("trailerModal");
+        const searchInput = document.getElementById('searchInput');
+        const genreFilter = document.getElementById('genreFilter');
+        const countryFilter = document.getElementById('countryFilter');
+        const yearFilter = document.getElementById('yearFilter');
+        const ratingFilter = document.getElementById('ratingFilter');
+        const sortFilter = document.getElementById('sortFilter');
+        const moviesGrid = document.getElementById('moviesGrid');
+        const pagination = document.getElementById('pagination');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const errorMessage = document.getElementById('errorMessage');
+        const trailerModal = document.getElementById('trailerModal');
 
         // Initialize
         async function init() {
             try {
+                loadingSpinner.style.display = 'block';
+                
+                // Check if API keys are set
+                if (TMDB_API_KEY === 'YOUR_TMDB_API_KEY' || YOUTUBE_API_KEY === 'YOUR_YOUTUBE_API_KEY') {
+                    showError('❌ Ошибка: Добавьте свои API ключи!\n1. TMDB API Key (получить на https://www.themoviedb.org/settings/api)\n2. YouTube Data API v3 Key (получить в Google Cloud Console)');
+                    loadingSpinner.style.display = 'none';
+                    return;
+                }
+
+                // Load genres
                 await loadGenres();
+                
+                // Load initial movies
                 await searchMovies();
-            } catch (err) {
-                showError("Ошибка инициализации: " + err.message);
+            } catch (error) {
+                showError('Ошибка при инициализации: ' + error.message);
+                loadingSpinner.style.display = 'none';
             }
         }
 
         async function loadGenres() {
-            try {
-                const res = await fetch(`${TMDB_BASE_URL}/api/genres?language=ru-RU`);
-                const data = await res.json();
-                genres = data.genres || [];
-                genres.forEach(g => {
-                    const opt = document.createElement("option");
-                    opt.value = g.id;
-                    opt.textContent = g.name;
-                    genreFilter.appendChild(opt);
-                });
-            } catch (err) {
-                console.error("Genres error:", err);
-            }
-        }
+    try {
+        const response = await fetch(`${API_PROXY_URL}/genres?language=ru-RU`);
+        const data = await response.json();
+        genres = data.genres;
+        
+        genres.forEach(genre => {
+            const option = document.createElement('option');
+            option.value = genre.id;
+            option.textContent = genre.name;
+            genreFilter.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Ошибка загрузки жанров:', error);
+    }
+}
+
 
         async function searchMovies(page = 1) {
-            try {
-                loadingSpinner.style.display = "block";
-                errorMessage.style.display = "none";
-                currentPage = page;
+    try {
+        loadingSpinner.style.display = 'block';
+        errorMessage.style.display = 'none';
+        moviesGrid.innerHTML = '';
+        currentPage = page;
 
-                const query = searchInput.value.trim();
-                let url = query 
-                    ? `${TMDB_BASE_URL}/api/search?query=${encodeURIComponent(query)}&page=${page}&language=ru-RU`
-                    : `${TMDB_BASE_URL}/api/discover?page=${page}&language=ru-RU`;
-
-                if (!query) {
-                    if (genreFilter.value) url += `&with_genres=${genreFilter.value}`;
-                    if (countryFilter.value) url += `&with_origin_country=${countryFilter.value}`;
-                    if (yearFilter.value) url += `&primary_release_year=${yearFilter.value}`;
-                    if (ratingFilter.value) url += `&vote_average.gte=${ratingFilter.value}`;
-                    if (sortFilter.value) url += `&sort_by=${sortFilter.value}`;
-                }
-
-                const res = await fetch(url);
-                const data = await res.json();
-
-                if (!data.results || data.results.length === 0) {
-                    moviesGrid.innerHTML = "<p style='text-align:center; width:100%; grid-column: 1/-1;'>Ничего не найдено</p>";
-                    pagination.innerHTML = "";
-                } else {
-                    totalPages = data.total_pages;
-                    displayMovies(data.results);
-                    displayPagination(data.total_pages);
-                }
-                loadingSpinner.style.display = "none";
-            } catch (err) {
-                showError("Ошибка поиска: " + err.message);
-                loadingSpinner.style.display = "none";
-            }
+        const query = searchInput.value.trim();
+        let url;
+        
+        if (query) {
+            url = `${API_PROXY_URL}/search?query=${encodeURIComponent(query)}&language=ru-RU&page=${page}`;
+        } else {
+            url = `${API_PROXY_URL}/discover?language=ru-RU&page=${page}`;
+            
+            const genre = genreFilter.value;
+            if (genre) url += `&with_genres=${genre}`;
+            
+            const country = countryFilter.value;
+            if (country) url += `&with_origin_country=${country}`;
+            
+            const year = yearFilter.value;
+            if (year) url += `&primary_release_year=${year}`;
+            
+            const rating = ratingFilter.value;
+            if (rating) url += `&vote_average_gte=${rating}`;
+            
+            const sort = sortFilter.value;
+            if (sort) url += `&sort_by=${sort}`;
         }
 
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (!data.results || data.results.length === 0) {
+            showError('Фильмы не найдены. Попробуйте изменить параметры поиска.');
+            loadingSpinner.style.display = 'none';
+            return;
+        }
+
+        totalPages = data.total_pages;
+        displayMovies(data.results);
+        displayPagination(data.total_pages);
+        loadingSpinner.style.display = 'none';
+    } catch (error) {
+        showError('Ошибка загрузки: ' + error.message);
+        loadingSpinner.style.display = 'none';
+    }
+}
+
+
         function displayMovies(movies) {
-            moviesGrid.innerHTML = "";
+            moviesGrid.innerHTML = '';
+            
             movies.forEach(movie => {
-                const card = document.createElement("div");
-                card.className = "movie-card";
-                const poster = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "";
-                const movieGenres = movie.genre_ids.map(id => {
-                    const g = genres.find(x => x.id === id);
-                    return g ? g.name : null;
-                }).filter(Boolean).slice(0, 2).join(", ");
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                
+                const poster = movie.poster_path 
+                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                    : '';
+                
+                const rating = movie.vote_average ? movie.vote_average.toFixed(1) : 'N/A';
+                const year = movie.release_date ? movie.release_date.split('-')[0] : 'N/A';
+                const genreNames = movie.genre_ids 
+                    ? movie.genre_ids
+                        .slice(0, 2)
+                        .map(id => {
+                            const g = genres.find(g => g.id === id);
+                            return g ? g.name : '';
+                        })
+                        .filter(Boolean)
+                        .join(', ')
+                    : '';
 
                 card.innerHTML = `
                     <div class="movie-poster">
-                        ${poster ? `<img src="${poster}" alt="${movie.title}">` : `<div style="padding:20px; text-align:center;">Нет фото</div>`}
-                        <div class="rating-badge">★ ${movie.vote_average.toFixed(1)}</div>
+                        ${poster 
+                            ? `<img src="${poster}" alt="${movie.title}" loading="lazy">` 
+                            : `<div class="movie-poster-placeholder">Нет постера</div>`
+                        }
+                        <div class="rating-badge">
+                            <span class="star">★</span>
+                            <span>${rating}</span>
+                        </div>
                     </div>
                     <div class="movie-info">
                         <div class="movie-title">${movie.title}</div>
-                        <div class="movie-year">${(movie.release_date || "").split("-")[0] || "N/A"}</div>
-                        <div class="movie-genres">${movieGenres ? `<span class="genre-tag">${movieGenres}</span>` : ""}</div>
+                        <div class="movie-year">${year}</div>
+                        ${genreNames ? `<div class="movie-genres"><span class="genre-tag">${genreNames}</span></div>` : ''}
                         <div class="movie-buttons">
-                            <button class="btn btn-primary" onclick="showDetails(${movie.id})">Подробнее</button>
+                            <button class="btn btn-primary" onclick="showTrailer(${movie.id}, '${movie.title.replace(/'/g, "\\'")}')">
+                                ▶ Трейлер
+                            </button>
+                            <button class="btn" onclick="getMoreInfo(${movie.id})">
+                                ℹ Info
+                            </button>
                         </div>
                     </div>
                 `;
-                card.onclick = (e) => {
-                    if (e.target.tagName !== 'BUTTON') showDetails(movie.id);
-                };
+                
                 moviesGrid.appendChild(card);
             });
         }
 
-        function displayPagination(total) {
-            pagination.innerHTML = "";
-            const maxPages = Math.min(total, 500);
-            
+        function displayPagination(totalPages) {
+            pagination.innerHTML = '';
+
+            // Previous button
             if (currentPage > 1) {
-                const btn = document.createElement("button");
-                btn.textContent = "Назад";
-                btn.onclick = () => searchMovies(currentPage - 1);
-                pagination.appendChild(btn);
+                const prevBtn = document.createElement('button');
+                prevBtn.textContent = '← Предыдущие';
+                prevBtn.onclick = () => {
+                    searchMovies(currentPage - 1);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+                pagination.appendChild(prevBtn);
             }
 
-            const info = document.createElement("span");
-            info.textContent = ` Стр ${currentPage} из ${maxPages} `;
-            info.style.alignSelf = "center";
-            pagination.appendChild(info);
+            // Page info
+            const pageInfo = document.createElement('div');
+            pageInfo.style.alignSelf = 'center';
+            pageInfo.style.color = 'var(--accent)';
+            pageInfo.style.fontWeight = 'bold';
+            pageInfo.textContent = `Страница ${currentPage} из ${totalPages}`;
+            pagination.appendChild(pageInfo);
 
-            if (currentPage < maxPages) {
-                const btn = document.createElement("button");
-                btn.textContent = "Вперед";
-                btn.onclick = () => searchMovies(currentPage + 1);
-                pagination.appendChild(btn);
+            // Next button
+            if (currentPage < totalPages && currentPage < 500) { // TMDB limits to 500 pages
+                const nextBtn = document.createElement('button');
+                nextBtn.textContent = 'Следующие →';
+                nextBtn.onclick = () => {
+                    searchMovies(currentPage + 1);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                };
+                pagination.appendChild(nextBtn);
             }
         }
 
-        async function showDetails(id) {
+        async function showTrailer(movieId, title) {
             try {
-                loadingSpinner.style.display = "block";
-                const [details, videos] = await Promise.all([
-                    fetch(`${TMDB_BASE_URL}/api/movie/${id}?language=ru-RU`).then(r => r.json()),
-                    fetch(`${TMDB_BASE_URL}/api/movie/${id}/videos?language=ru-RU`).then(r => r.json())
-                ]);
+                loadingSpinner.style.display = 'block';
 
-                document.getElementById("modalTitle").textContent = details.title;
-                document.getElementById("modalPoster").src = details.poster_path ? `https://image.tmdb.org/t/p/w500${details.poster_path}` : "";
-                document.getElementById("modalYear").textContent = details.release_date || "N/A";
-                document.getElementById("modalRating").textContent = `★ ${details.vote_average.toFixed(1)}`;
-                document.getElementById("modalGenres").textContent = details.genres.map(g => g.name).join(", ");
-                document.getElementById("modalDescription").textContent = details.overview || "Описание отсутствует";
+                // Get movie details
+                const detailsResponse = await fetch(`${API_PROXY_URL}/movie/${movieId}?language=ru-RU`);
 
-                const trailer = (videos.results || []).find(v => v.type === "Trailer" && v.site === "YouTube");
-                const trailerContainer = document.getElementById("trailerContainer");
-                const trailerFrame = document.getElementById("trailerFrame");
+                const movieDetails = await detailsResponse.json();
+
+                // Get videos
+                const videosResponse = await fetch(`${API_PROXY_URL}/movie/${movieId}/videos?language=ru-RU`);
+                const videosData = await videosResponse.json();
+
+                // Get cast
+                const castResponse = await fetch(`${API_PROXY_URL}/movie/${movieId}/credits?language=ru-RU`);
+                const castData = await castResponse.json();
+
+                // Update modal
+                document.getElementById('modalTitle').textContent = title;
+                document.getElementById('modalPoster').src = 
+                    movieDetails.poster_path 
+                        ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
+                        : '';
+                document.getElementById('modalYear').textContent = movieDetails.release_date || 'N/A';
+                document.getElementById('modalRating').innerHTML = `⭐ ${movieDetails.vote_average.toFixed(1)}/10`;
+                document.getElementById('modalGenres').textContent = 
+                    movieDetails.genres.map(g => g.name).join(', ') || 'Не указаны';
+                document.getElementById('modalRuntime').textContent = 
+                    movieDetails.runtime ? `${movieDetails.runtime} минут` : 'N/A';
+                document.getElementById('modalDescription').textContent = 
+                    movieDetails.overview || 'Описание недоступно';
+
+                // Find YouTube trailer
+                const trailer = videosData.results.find(v => 
+                    v.type === 'Trailer' && v.site === 'YouTube'
+                );
 
                 if (trailer) {
-                    trailerContainer.style.display = "block";
-                    trailerFrame.src = `https://www.youtube.com/embed/${trailer.key}`;
+                    const trailerContainer = document.getElementById('trailerContainer');
+                    const trailerFrame = document.getElementById('trailerFrame');
+                    trailerContainer.style.display = 'block';
+                    trailerFrame.src = `https://www.youtube.com/embed/${trailer.key}?vq=hd720&controls=1&modestbranding=1`;
                 } else {
-                    trailerContainer.style.display = "none";
-                    trailerFrame.src = "";
+                    document.getElementById('trailerContainer').style.display = 'none';
+                    console.log('Трейлер на YouTube не найден. Попробуем через YouTube API...');
+                    
+                    // Fallback: search via YouTube API
+                    try {
+                        const youtubeUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(title + ' trailer')}&maxResults=1&type=video&key=${YOUTUBE_API_KEY}`;
+                        const ytResponse = await fetch(youtubeUrl);
+                        const ytData = await ytResponse.json();
+                        
+                        if (ytData.items && ytData.items.length > 0) {
+                            const videoId = ytData.items[0].id.videoId;
+                            const trailerContainer = document.getElementById('trailerContainer');
+                            const trailerFrame = document.getElementById('trailerFrame');
+                            trailerContainer.style.display = 'block';
+                            trailerFrame.src = `https://www.youtube.com/embed/${videoId}?vq=hd720&controls=1&modestbranding=1`;
+                        }
+                    } catch (e) {
+                        console.error('YouTube Search Error:', e);
+                    }
                 }
 
-                trailerModal.classList.add("active");
-                loadingSpinner.style.display = "none";
-            } catch (err) {
-                showError("Ошибка загрузки деталей: " + err.message);
-                loadingSpinner.style.display = "none";
+                trailerModal.classList.add('active');
+                loadingSpinner.style.display = 'none';
+            } catch (error) {
+                showError('Ошибка загрузки трейлера: ' + error.message);
+                loadingSpinner.style.display = 'none';
             }
+        }
+
+        async function getMoreInfo(movieId) {
+            // Simply show the modal with the same data
+            const cards = document.querySelectorAll('.movie-card');
+            // This is a simplified version - in production you'd fetch and display more details
+            showTrailer(movieId, 'Подробнее о фильме');
         }
 
         function closeModal() {
-            trailerModal.classList.remove("active");
-            document.getElementById("trailerFrame").src = "";
+            trailerModal.classList.remove('active');
+            document.getElementById('trailerFrame').src = '';
         }
 
-        function showError(msg) {
-            errorMessage.textContent = msg;
-            errorMessage.style.display = "block";
-            window.scrollTo(0, 0);
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
         }
 
-        searchInput.onkeypress = (e) => { if (e.key === "Enter") searchMovies(1); };
-        window.onclick = (e) => { if (e.target === trailerModal) closeModal(); };
-        
-        init();
+        // Event Listeners
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchMovies(1);
+            }
+        });
+
+        [genreFilter, countryFilter, yearFilter, ratingFilter, sortFilter].forEach(el => {
+            el.addEventListener('change', () => {
+                searchMovies(1);
+            });
+        });
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Close modal on outside click
+        trailerModal.addEventListener('click', (e) => {
+            if (e.target === trailerModal) closeModal();
+        });
+
+        // Initialize on load
+        window.addEventListener('load', init);
     </script>
 </body>
 </html>
